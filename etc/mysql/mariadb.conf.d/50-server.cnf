@@ -33,14 +33,14 @@ sql-mode="NO_ENGINE_SUBSTITUTION"
 #
 # * Fine Tuning
 #
-key_buffer_size		= 16M
+key_buffer_size		= 32M
 max_allowed_packet	= 16M
 thread_stack		= 192K
-thread_cache_size       = 8
+thread_cache_size   = 4
 # This replaces the startup script and checks MyISAM tables if needed
 # the first time they are touched
 myisam_recover_options  = BACKUP
-#max_connections        = 100
+max_connections        = 10
 #table_cache            = 64
 #thread_concurrency     = 10
 
@@ -48,7 +48,7 @@ myisam_recover_options  = BACKUP
 # * Query Cache Configuration
 #
 query_cache_limit	= 1M
-query_cache_size        = 16M
+query_cache_size    = 64M
 
 #
 # * Logging and Replication
@@ -64,8 +64,8 @@ query_cache_size        = 16M
 log_error = /var/log/mysql/error.log
 #
 # Enable the slow query log to see queries with especially long duration
-#slow_query_log_file	= /var/log/mysql/mariadb-slow.log
-#long_query_time = 10
+slow_query_log_file	= /var/log/mysql/mysql-slow.log
+long_query_time = 5
 #log_slow_rate_limit	= 1000
 #log_slow_verbosity	= query_plan
 #log-queries-not-using-indexes
@@ -76,7 +76,7 @@ log_error = /var/log/mysql/error.log
 #server-id		= 1
 #log_bin			= /var/log/mysql/mysql-bin.log
 expire_logs_days	= 10
-max_binlog_size   = 100M
+max_binlog_size     = 256M
 #binlog_do_db		= include_database_name
 #binlog_ignore_db	= exclude_database_name
 

@@ -66,6 +66,7 @@ ADD ./etc/systemd/system/mysql.service.d/limits.conf /etc/systemd/system/mysql.s
 RUN apt-get -y install amavisd-new spamassassin clamav clamav-daemon zoo unzip bzip2 arj nomarch lzop cabextract apt-listchanges libnet-ldap-perl libauthen-sasl-perl clamav-docs daemon libio-string-perl libio-socket-ssl-perl libnet-ident-perl zip libnet-dns-perl
 ADD ./etc/clamav/clamd.conf /etc/clamav/clamd.conf
 RUN service spamassassin stop && systemctl disable spamassassin
+RUN freshclam
 
 # --- 9.1 Install Metronome XMPP Server
 RUN echo "deb http://packages.prosody.im/debian jessie main" > /etc/apt/sources.list.d/metronome.list
@@ -195,7 +196,7 @@ RUN cd /root && wget http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.g
 # RUN sed -i -e "s/post_max_size\s*=\s*8M/post_max_size = 100M/g" /etc/php5/fpm/php.ini
 
 # ADD ./etc/mysql/my.cnf /etc/mysql/my.cnf
-ADD ./etc/clamav/clamd.conf /etc/clamav/clamd.conf
+# ADD ./etc/clamav/clamd.conf /etc/clamav/clamd.conf
 
 RUN echo "export TERM=xterm" >> /root/.bashrc
 
@@ -206,13 +207,11 @@ ADD ./start.sh /start.sh
 ADD ./supervisord.conf /etc/supervisor/supervisord.conf
 ADD ./etc/cron.daily/sql_backup.sh /etc/cron.daily/sql_backup.sh
 ADD ./autoinstall.ini /root/ispconfig3_install/install/autoinstall.ini
-RUN mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor
+RUN mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor /var/log/clamav /var/www/html /var/log/apache2 /var/backup/sql
+RUN chmod 777 /var/log/supervisor /var/run/supervisor /var/log/clamav /var/www/html /var/log/apache2 /var/backup/sql
 RUN mv /bin/systemctl /bin/systemctloriginal
 ADD ./bin/systemctl /bin/systemctl
 RUN chmod 755 /start.sh /bin/systemctl
-
-RUN mkdir -p /var/backup/sql
-RUN freshclam
 
 # CLEANING
 RUN apt-get autoremove -y && apt-get clean && rm -rf /tmp/*

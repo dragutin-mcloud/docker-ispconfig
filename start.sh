@@ -33,8 +33,6 @@ if [ ! -f /usr/local/ispconfig/interface/lib/config.inc.php ]; then
 	rm -r /root/ispconfig3_install
 fi
 
-
-
 screenfetch
 
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
